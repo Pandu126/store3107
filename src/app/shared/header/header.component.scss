@@ -1,0 +1,16 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.header-main {
+  margin: 0px;
+  padding: 0px;
+}
+
+.example-spacer .navbar-nav {
+  font-size: 18px;
+  flex-direction: row;
+  li {
+    margin: 0 5px;
+  }
+}

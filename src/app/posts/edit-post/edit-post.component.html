@@ -1,0 +1,17 @@
+<form action="" [formGroup]="editPostForm" (ngSubmit)="onEditPost()">
+    <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input type="text" matInput formControlName="title" placeholder="Enter Title">
+        <mat-error *ngIf="editPostForm.get('title')?.hasError('required')">
+            Title is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input type="text" matInput formControlName="description" placeholder="Enter the description">
+        <mat-error *ngIf="editPostForm.get('description')?.hasError('required')">
+            Description is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button [disabled]="(!editPostForm.valid)" color="accent" type="submit">Add Post</button>
+</form>
