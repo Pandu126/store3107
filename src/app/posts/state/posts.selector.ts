@@ -13,7 +13,6 @@ export const getPosts = createSelector(
 export const getPostByID = createSelector(
   getPostsState,
   (state: any, props: any) => {
-    console.log(props, "selector");
     return state.posts.find((post: { id: any; })=> post.id === props.id)
   }
 );

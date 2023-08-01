@@ -23,53 +23,34 @@ export class EditPostComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
   ngOnInit() {
-    this.editPostForm = new FormGroup({
-      title: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-    });
-
     this.route.paramMap.subscribe((dat) => {
-      console.log(dat.get('id'));
-      let id = dat.get('id');
-      this.store.select(getPostByID, { id }).subscribe((data) => {
+      this.id = dat.get('id');
+      this.store.select(getPostByID, { id: this.id }).subscribe((data) => {
         this.post = data;
-      console.log(this.post);
-      });
-    });
-    let values;
-    this.route.url.subscribe((data) => {
-      this.store.select(getPosts).subscribe((data) => {
-        this.id = this.route.snapshot.params['id'];
-        values = data;
-        this.post = values.filter((data) => {
-          return this.id == data.id;
+        console.log(this.post);
+        this.editPostForm = new FormGroup({
+          title: new FormControl(this.post.title, [
+            Validators.required,
+            Validators.minLength(6),
+          ]),
+          description: new FormControl(this.post.description, [
+            Validators.required,
+            Validators.minLength(10),
+          ]),
         });
-        this.editedPost = {
-          title: this.post[0].title,
-          description: this.post[0].description,
-        };
-        this.editPostForm.patchValue(this.editedPost);
       });
-      this.editPostForm.patchValue(this.editedPost);
     });
   }
 
   onEditPost() {
-    let formValue = this.editPostForm.value;
-    console.log(this.id);
-    this.id = this.id.toString();
-    console.log(this.id);
-    let finalvalue: Post = {
+    const title = this.editPostForm.value.title;
+    const description = this.editPostForm.value.description;
+    let post: Post = {
       id: this.id,
-      title: formValue.title,
-      description: formValue.description,
+      title,
+      description,
     };
-    this.store.dispatch(editPost({ post: finalvalue }));
+    this.store.dispatch(editPost({ post }));
+    this.router.navigate(['/posts'])
   }
 }
