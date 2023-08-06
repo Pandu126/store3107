@@ -4,6 +4,8 @@ import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material/material.module';
+import { AutheEffects } from './state/auth.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 const routes: Routes = [
   {
@@ -21,6 +23,7 @@ const routes: Routes = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    EffectsModule.forFeature([AutheEffects]),
     RouterModule.forChild(routes),
   ],
 })

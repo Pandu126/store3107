@@ -1,8 +1,6 @@
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 export const environment = {
-    production: false,
-    imports: [
-        StoreDevtoolsModule.instrument({ maxAge: 25 })
-    ],
+  production: false,
+  FIBERBASE_API_KEY: 'AIzaSyDHqEVvCP_mCfT-Gn9HZObeCQ0z2TTqRfk',
 };

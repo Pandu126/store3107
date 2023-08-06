@@ -4,7 +4,7 @@
             <mat-card-content>
                 <h3>Login</h3>
                 <hr />
-                <form class="example-form" [formGroup]="loginForm" (onsubmit)="login()">
+                <form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()">
                     <mat-form-field class="example-full-width">
                         <mat-label>Email</mat-label>
                         <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com">
