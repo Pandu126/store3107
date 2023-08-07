@@ -12,5 +12,5 @@ export const setLoadingSpinner = createAction(
 
 export const setErrorMessage = createAction(
   sharedActions.SET_ERROR_MESSAGE,
-  props<{ message: string }>()
+  props<{ message: string; showloginError: boolean }>()
 );

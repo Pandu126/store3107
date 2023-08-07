@@ -11,9 +11,11 @@ const _sharedReducer = createReducer(
     };
   }),
   on(setErrorMessage, (state, action) => {
+    console.log(action);
     return {
       ...state,
       errorMessage: action.message,
+      showloginError: action.showloginError,
     };
   })
 );

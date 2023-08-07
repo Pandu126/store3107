@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, async } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AppState } from 'src/app/Store/app.state';
 import { isAuthenticated } from 'src/app/auth/state/auth.selector';
 

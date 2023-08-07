@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginStart, loginSuccess } from './auth.actions';
+import {
+  loginStart,
+  loginSuccess,
+  signUpStart,
+  signUpSuccess,
+} from './auth.actions';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthResponseData } from 'src/app/Models/AuthResponseData.model';
@@ -30,6 +35,9 @@ export class AutheEffects {
           map((data: AuthResponseData) => {
             const user = this.authService.formatUser(data);
             this.store.dispatch(setLoadingSpinner({ status: false }));
+            this.store.dispatch(
+              setErrorMessage({ message: '', showloginError: false })
+            );
             return loginSuccess({ user });
           }),
           catchError((error: any) => {
@@ -38,7 +46,38 @@ export class AutheEffects {
               error.error.error.message
             );
             this.store.dispatch(setLoadingSpinner({ status: false }));
-            return of(setErrorMessage({ message: errorMessage }));
+            return of(
+              setErrorMessage({ message: errorMessage, showloginError: true })
+            );
+          })
+        );
+      })
+    );
+  });
+
+  signUp$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signUpStart),
+      exhaustMap((action) => {
+        return this.authService.signUp(action.email, action.password).pipe(
+          map((data: AuthResponseData) => {
+            const user = this.authService.formatUser(data);
+            this.store.dispatch(setLoadingSpinner({ status: false }));
+            this.store.dispatch(
+              setErrorMessage({ message: '', showloginError: false })
+            );
+
+            return signUpSuccess({ user });
+          }),
+          catchError((error: any) => {
+            console.log(error.error.message);
+            const errorMessage = this.authService.getErrorMessage(
+              error.error.error.message
+            );
+            this.store.dispatch(setLoadingSpinner({ status: false }));
+            return of(
+              setErrorMessage({ message: errorMessage, showloginError: true })
+            );
           })
         );
       })
@@ -48,7 +87,7 @@ export class AutheEffects {
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(loginSuccess, signUpSuccess),
         tap((action) => {
           this.router.navigate(['/']);
         })
