@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
+  autoLogin,
+  logOut,
+  loginFail,
   loginStart,
   loginSuccess,
   signUpStart,
   signUpSuccess,
 } from './auth.actions';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthResponseData } from 'src/app/Models/AuthResponseData.model';
 import { Store } from '@ngrx/store';
@@ -28,7 +31,7 @@ export class AutheEffects {
 
   login$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loginStart),
+      ofType(...[loginStart, signUpStart]),
       exhaustMap((action) => {
         console.log(action);
         return this.authService.login(action.email, action.password).pipe(
@@ -38,7 +41,8 @@ export class AutheEffects {
             this.store.dispatch(
               setErrorMessage({ message: '', showloginError: false })
             );
-            return loginSuccess({ user });
+            this.authService.setUserInLocalStorage(user);
+            return loginSuccess({ user, redirect: true });
           }),
           catchError((error: any) => {
             console.log(error.error.error.message);
@@ -66,8 +70,8 @@ export class AutheEffects {
             this.store.dispatch(
               setErrorMessage({ message: '', showloginError: false })
             );
-
-            return signUpSuccess({ user });
+            this.authService.setUserInLocalStorage(user);
+            return signUpSuccess({ user, redirect: true });
           }),
           catchError((error: any) => {
             console.log(error.error.message);
@@ -84,12 +88,44 @@ export class AutheEffects {
     );
   });
 
+  autoLogin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(autoLogin),
+      exhaustMap(() => {
+        const user = this.authService.getUserFromLocalStorage();
+        console.log(user);
+        if (user !== null) {
+          return of(loginSuccess({ user, redirect: false }));
+        }
+        return of(loginFail);
+      })
+    );
+  });
+
+  logOut$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(logOut),
+        map((action) => {
+          this.authService.logOut();
+          this.router.navigate(['auth']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(loginSuccess, signUpSuccess),
         tap((action) => {
-          this.router.navigate(['/']);
+          this.store.dispatch(
+            setErrorMessage({ message: '', showloginError: false })
+          );
+          if (action.redirect) {
+            this.router.navigate(['/']);
+          }
         })
       );
     },

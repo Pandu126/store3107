@@ -7,6 +7,8 @@ export enum loginEnums {
   LOGIN_FAIL = '[auth page] login fail',
   SIGNUP_START = '[auth page] signup start',
   SIGNUP_SUCCESS = '[auth page] signup success',
+  AUTOLOGIN_ACTION = '[auth page] auto login',
+  LOGOUT_ACTION = '[auth page] log out',
 }
 
 export const loginStart = createAction(
@@ -16,7 +18,7 @@ export const loginStart = createAction(
 
 export const loginSuccess = createAction(
   loginEnums.LOGIN_SUCCESS,
-  props<{ user: User }>()
+  props<{ user: User; redirect: boolean }>()
 );
 
 export const signUpStart = createAction(
@@ -26,7 +28,8 @@ export const signUpStart = createAction(
 
 export const signUpSuccess = createAction(
   loginEnums.SIGNUP_SUCCESS,
-  props<{ user: User }>()
+  props<{ user: User; redirect: boolean }>()
 );
-
+export const logOut = createAction(loginEnums.LOGOUT_ACTION);
+export const autoLogin = createAction(loginEnums.AUTOLOGIN_ACTION);
 export const loginFail = createAction(loginEnums.LOGIN_FAIL);

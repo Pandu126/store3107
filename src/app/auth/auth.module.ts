@@ -25,7 +25,7 @@ const routes: Routes = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    EffectsModule.forFeature([AutheEffects]),
+    EffectsModule.forFeature([]),
     RouterModule.forChild(routes),
   ],
 })
