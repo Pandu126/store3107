@@ -3,8 +3,13 @@ import { Post } from 'src/app/Models/post.model';
 
 export enum postsEnum {
   ADD_POST_ACTION = '[posts page] add post',
+  ADD_POST_SUCCESS = '[posts page] add post success',
   UPDATE_POST_ACTION = '[posts page] edit post',
+  UPDATE_POST_SUCCESS = '[posts page] edit post success',
   DELETE_POST_ACTION = '[posts page] delete post',
+  DELETE_POST_SUCCESS = '[posts page] delete post success',
+  LOAD_POSTS = '[posts page] load posts',
+  LOAD_POSTS_SUCCESS = '[posts page] load posts success',
 }
 
 export const addNewPost = createAction(
@@ -19,5 +24,24 @@ export const editPost = createAction(
 
 export const deletePost = createAction(
   postsEnum.DELETE_POST_ACTION,
-  props<{id: any}>()
+  props<{ id: any }>()
+);
+export const deletePostSuccess = createAction(
+  postsEnum.DELETE_POST_SUCCESS,
+  props<{ id: any }>()
+);
+
+export const loadPosts = createAction(postsEnum.LOAD_POSTS);
+export const loadPostsSuccess = createAction(
+  postsEnum.LOAD_POSTS_SUCCESS,
+  props<{ posts: Post[] }>()
+);
+export const addpostSuccess = createAction(
+  postsEnum.ADD_POST_SUCCESS,
+  props<{ post: Post }>()
+);
+
+export const updatedPostsSuccess = createAction(
+  postsEnum.UPDATE_POST_SUCCESS,
+  props<{ post: Post }>()
 );

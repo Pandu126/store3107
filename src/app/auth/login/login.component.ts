@@ -24,7 +24,6 @@ export class LoginComponent {
   }
   login() {
     this.loginForm.value;
-    console.log(this.loginForm.value);
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
     this.store.dispatch(setLoadingSpinner({ status: true }));

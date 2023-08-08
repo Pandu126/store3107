@@ -17,7 +17,6 @@ export class CustomCounterInputComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
   onAdd() {
     this.store.dispatch(customIncrement({ value: +this.value }));
-    console.log(this.value);
   }
   changeChannelName() {
     this.store.dispatch(changeChannelName());

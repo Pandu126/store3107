@@ -33,10 +33,10 @@ export class AutheEffects {
     return this.actions$.pipe(
       ofType(...[loginStart, signUpStart]),
       exhaustMap((action) => {
-        console.log(action);
         return this.authService.login(action.email, action.password).pipe(
           map((data: AuthResponseData) => {
             const user = this.authService.formatUser(data);
+            debugger;
             this.store.dispatch(setLoadingSpinner({ status: false }));
             this.store.dispatch(
               setErrorMessage({ message: '', showloginError: false })
@@ -45,7 +45,6 @@ export class AutheEffects {
             return loginSuccess({ user, redirect: true });
           }),
           catchError((error: any) => {
-            console.log(error.error.error.message);
             const errorMessage = this.authService.getErrorMessage(
               error.error.error.message
             );
@@ -74,7 +73,6 @@ export class AutheEffects {
             return signUpSuccess({ user, redirect: true });
           }),
           catchError((error: any) => {
-            console.log(error.error.message);
             const errorMessage = this.authService.getErrorMessage(
               error.error.error.message
             );
@@ -93,7 +91,6 @@ export class AutheEffects {
       ofType(autoLogin),
       exhaustMap(() => {
         const user = this.authService.getUserFromLocalStorage();
-        console.log(user);
         if (user !== null) {
           return of(loginSuccess({ user, redirect: false }));
         }
@@ -108,7 +105,7 @@ export class AutheEffects {
         ofType(logOut),
         map((action) => {
           this.authService.logOut();
-          this.router.navigate(['auth']);
+          this.router.navigate(['login']);
         })
       );
     },

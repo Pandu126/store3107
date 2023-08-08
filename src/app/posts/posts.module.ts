@@ -8,6 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material/material.module';
 import { StoreModule } from '@ngrx/store';
 import { postsReducer } from './state/post.reducer';
+import { HttpClientModule } from '@angular/common/http';
+import { EffectsModule } from '@ngrx/effects';
+import { postsEffects } from './state/posts.effects';
 
 const routes: Routes = [
   {
@@ -28,6 +31,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     StoreModule.forFeature('posts', postsReducer),
+    EffectsModule.forFeature([postsEffects]),
     MaterialModule,
   ],
 })

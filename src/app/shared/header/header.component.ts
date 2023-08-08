@@ -19,11 +19,10 @@ export class HeaderComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.isAuthenticated = this.store.pipe(select(isAuthenticated));
-    // this.isAuthenticated.subscribe((res) => console.log(res));
   }
   onLogOut(e:Event) {
     e.preventDefault();
-    this.authService.logOut();
+    // this.authService.logOut();
     this.store.dispatch(logOut());
   }
 }

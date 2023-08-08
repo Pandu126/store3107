@@ -5,20 +5,18 @@ import { logOut, loginSuccess, signUpSuccess } from './auth.actions';
 const _authReducer = createReducer(
   initialState,
   on(loginSuccess, (state, action) => {
-    console.log(action);
     return {
       ...state,
       user: action.user,
     };
   }),
   on(signUpSuccess, (state, action) => {
-    console.log(action);
     return {
       ...state,
       user: action.user,
     };
   }),
-  on(logOut, (action, state) => {
+  on(logOut, (state, action) => {
     return {
       ...state,
       user: null,

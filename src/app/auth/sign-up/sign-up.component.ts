@@ -23,7 +23,6 @@ export class SignUpComponent implements OnInit {
     });
   }
   signUp() {
-    console.log(this.signUpForm.value);
     const email = this.signUpForm.value.email;
     const password = this.signUpForm.value.password;
     this.store.dispatch(setLoadingSpinner({ status: true }));

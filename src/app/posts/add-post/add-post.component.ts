@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { addNewPost } from '../state/post.actions';
 import { Post } from 'src/app/Models/post.model';
 import { AppState } from 'src/app/Store/app.state';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-add-post',
@@ -13,7 +14,7 @@ import { AppState } from 'src/app/Store/app.state';
 export class AddPostComponent {
   postForm!: FormGroup;
   postFormError!: string;
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private postsService:PostsService) {}
   ngOnInit() {
     this.postForm = new FormGroup({
       title: new FormControl(null, [
@@ -39,7 +40,6 @@ export class AddPostComponent {
     return '';
   }
   onAddPost() {
-    console.log(this.postForm.value);
     const post: Post = {
       title: this.postForm.value.title,
       description: this.postForm.value.description,

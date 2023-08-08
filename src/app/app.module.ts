@@ -13,10 +13,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { AuthModule } from './auth/auth.module';
 import { EffectsModule } from '@ngrx/effects';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { appReducer } from './Store/app.state';
 import { AutheEffects } from './auth/state/auth.effects';
+import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import { AutheEffects } from './auth/state/auth.effects';
     // StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
