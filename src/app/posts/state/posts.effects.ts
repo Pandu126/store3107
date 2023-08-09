@@ -11,11 +11,12 @@ import {
   loadPostsSuccess,
   updatedPostsSuccess,
 } from './post.actions';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class postsEffects {
-  constructor(private actins$: Actions, private postsService: PostsService) {}
+  constructor(private actins$: Actions, private postsService: PostsService, private router:Router) {}
 
   loadPosts$ = createEffect(() => {
     return this.actins$.pipe(
@@ -50,11 +51,11 @@ export class postsEffects {
     return this.actins$.pipe(
       ofType(editPost),
       switchMap((action) => {
-        console.log(action.post)
+        console.log(action.post);
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
             console.log(data);
-            return updatedPostsSuccess({ post: action.post });
+            return updatedPostsSuccess({ post: action.post, redirect: true });
           })
         );
       })
@@ -72,4 +73,18 @@ export class postsEffects {
       })
     );
   });
+
+  updatePostRedirect$ = createEffect(
+    () => {
+      return this.actins$.pipe(
+        ofType(updatedPostsSuccess),
+        tap((action) => {
+          if(action.redirect){
+            this.router.navigate(['/posts']);
+          }
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

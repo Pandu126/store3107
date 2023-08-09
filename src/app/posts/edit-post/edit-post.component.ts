@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { editPost } from '../state/post.actions';
 import { Post } from 'src/app/Models/post.model';
 import { AppState } from 'src/app/Store/app.state';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-post',
@@ -19,30 +19,31 @@ export class EditPostComponent implements OnInit, OnDestroy {
   editedPost!: Post;
   id!: any;
   postSubscription!: Subscription;
-  constructor(
-    private store: Store<AppState>,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private store: Store<AppState>) {}
   ngOnInit() {
-    this.postSubscription = this.route.paramMap.subscribe((dat) => {
-      this.id = dat.get('id');
-      this.store.select(getPostByID, { id: this.id }).subscribe((data) => {
-        this.post = data;
-        this.editPostForm = new FormGroup({
-          title: new FormControl(this.post.title, [
-            Validators.required,
-            Validators.minLength(6),
-          ]),
-          description: new FormControl(this.post.description, [
-            Validators.required,
-            Validators.minLength(10),
-          ]),
-        });
-      });
+    this.createForm();
+    this.postSubscription = this.store.select(getPostByID).subscribe((post) => {
+      if(post){
+      this.post = post;
+      this.editPostForm.patchValue({
+        title: post.title,
+        description: post.description,
+      });}
     });
   }
 
+  createForm() {
+    this.editPostForm = new FormGroup({
+      title: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      description: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(10),
+      ]),
+    });
+  }
   onEditPost() {
     const title = this.editPostForm.value.title;
     const description = this.editPostForm.value.description;
@@ -52,7 +53,6 @@ export class EditPostComponent implements OnInit, OnDestroy {
       description,
     };
     this.store.dispatch(editPost({ post }));
-    this.router.navigate(['/posts']);
   }
   ngOnDestroy() {
     if (this.postSubscription) {

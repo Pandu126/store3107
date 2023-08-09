@@ -36,7 +36,6 @@ export class AutheEffects {
         return this.authService.login(action.email, action.password).pipe(
           map((data: AuthResponseData) => {
             const user = this.authService.formatUser(data);
-            debugger;
             this.store.dispatch(setLoadingSpinner({ status: false }));
             this.store.dispatch(
               setErrorMessage({ message: '', showloginError: false })
