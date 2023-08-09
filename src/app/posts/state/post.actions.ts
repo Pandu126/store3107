@@ -10,6 +10,7 @@ export enum postsEnum {
   DELETE_POST_SUCCESS = '[posts page] delete post success',
   LOAD_POSTS = '[posts page] load posts',
   LOAD_POSTS_SUCCESS = '[posts page] load posts success',
+  VIEW_POST = '[posts page] view post',
 }
 
 export const addNewPost = createAction(
@@ -44,4 +45,9 @@ export const addpostSuccess = createAction(
 export const updatedPostsSuccess = createAction(
   postsEnum.UPDATE_POST_SUCCESS,
   props<{ post: Post }>()
+);
+
+export const viewPost = createAction(
+  postsEnum.VIEW_POST,
+  props<{ id: string; modelBackdrop: boolean }>()
 );

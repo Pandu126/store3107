@@ -30,14 +30,52 @@
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let element; let i= index">
                     <!-- <button mat-icon-button color="primary" (click)="updateAction(i)"><mat-icon>edit</mat-icon></button> -->
-                    <a href="" mat-icon-button color="primary" [routerLink]="['edit', element.id]"><mat-icon>edit</mat-icon></a>
-                    <button mat-icon-button color="warn" (click)="deletePost(element.id)"><mat-icon>delete</mat-icon></button>
+                    <a href="" mat-icon-button color="primary"
+                        [routerLink]="['edit', element.id]"><mat-icon>edit</mat-icon></a>
+                    <button mat-icon-button color="warn"
+                        (click)="deletePost(element.id)"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="viewPost(element.id)" color="gray"
+                        type="button"><mat-icon>remove_red_eye</mat-icon></button>
                 </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row;let i; columns: displayedColumns;"></tr>
         </table>
+    </div>
+    <div *ngIf="openModel" class="backdrop">
+        <mat-card class="viewPost-main">
+            <mat-card-header>
+                <mat-card-title>View Post</mat-card-title>
+                <a mat-button class="closeModelIcon" (click)="closeModel()"><mat-icon>close</mat-icon></a>
+                <mat-card-subtitle>{{viewSinglePost.id}}</mat-card-subtitle>
+            </mat-card-header>
+            <hr />
+            <mat-card-content>
+                <form action="" [formGroup]="editPostForm" (ngSubmit)="onEditPost()">
+                    <mat-form-field>
+                        <mat-label>Title</mat-label>
+                        <input type="text" matInput formControlName="title" placeholder="Enter Title">
+                        <mat-error *ngIf="editPostForm.get('title')?.hasError('required')">
+                            Title is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Description</mat-label>
+                        <input type="text" matInput formControlName="description" placeholder="Enter the description">
+                        <mat-error *ngIf="editPostForm.get('description')?.hasError('required')">
+                            Description is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <hr />
+            <mat-card-actions>
+                <button class="mx-2" mat-raised-button (click)="deletePost(viewPostId)" color="warn">Delete</button>
+                <button mat-raised-button (click)="onEditPost()" color="primary"
+                    [disabled]="(!editPostForm.valid)">Update</button>
+            </mat-card-actions>
+        </mat-card>
     </div>
     <div class="col-md-4">
         <router-outlet></router-outlet>

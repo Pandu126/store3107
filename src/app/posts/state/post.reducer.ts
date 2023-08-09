@@ -2,11 +2,11 @@ import { createReducer, on } from '@ngrx/store';
 import { postsInitialState } from './post.state';
 import {
   addpostSuccess,
-  deletePost,
   deletePostSuccess,
   editPost,
   loadPosts,
   loadPostsSuccess,
+  viewPost,
 } from './post.actions';
 import { Post } from 'src/app/Models/post.model';
 
@@ -47,6 +47,13 @@ const _postsReducer = createReducer(
     return {
       ...state,
     };
+  }),
+  on(viewPost, (state,action)=>{
+    console.log('viewPost called in reducer', action);
+    return{
+      ...state,
+      modelBackdrop:action.modelBackdrop
+    }
   })
 );
 

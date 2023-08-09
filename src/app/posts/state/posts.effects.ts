@@ -50,6 +50,7 @@ export class postsEffects {
     return this.actins$.pipe(
       ofType(editPost),
       switchMap((action) => {
+        console.log(action.post)
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
             console.log(data);

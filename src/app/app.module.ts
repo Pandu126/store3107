@@ -18,6 +18,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { appReducer } from './Store/app.state';
 import { AutheEffects } from './auth/state/auth.effects';
 import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
+import { ModelComponent } from './shared/model/model.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
     HomeComponent,
     HeaderComponent,
     LoadingSpinnerComponent,
+    ModelComponent,
   ],
   imports: [
     BrowserModule,

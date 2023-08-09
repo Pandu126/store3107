@@ -16,3 +16,7 @@ export const getPostByID = createSelector(
     return state.posts.find((post: { id: any; })=> post.id === props.id)
   }
 );
+export const modelwindow = createSelector(getPostsState,(state:any)=>{
+  console.log(state);
+  return state.modelBackdrop;
+})

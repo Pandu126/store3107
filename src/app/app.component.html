@@ -1,5 +1,6 @@
 <app-header></app-header>
 <app-loading-spinner *ngIf="showLoading |async"></app-loading-spinner>
+<div *ngIf="modelwindow$|async" class="backdrop"></div>
 <div class="container">
     <div class="row">
         <div class="col-md-12 mt-3">
