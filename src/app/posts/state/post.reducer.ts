@@ -9,7 +9,6 @@ import {
   updatedPostsSuccess,
   viewPost,
 } from './post.actions';
-import { Post } from 'src/app/Models/post.model';
 
 const _postsReducer = createReducer(
   postsInitialState,

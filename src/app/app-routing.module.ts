@@ -19,7 +19,7 @@ const routes: Routes = [
       import('./posts/posts.module').then((m) => m.PostsModule),
     canActivate: [authGuard],
   },
-  { path: 'post/dettails:id', component: SinglePostComponent },
+  { path: 'posts/details/:id', component: SinglePostComponent },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),

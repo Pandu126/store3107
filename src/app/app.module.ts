@@ -21,6 +21,8 @@ import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
 import { ModelComponent } from './shared/model/model.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { CustomSerializer } from './router/custom-serializer';
+import { SinglePostComponent } from './posts/single-post/single-post.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,9 +31,11 @@ import { CustomSerializer } from './router/custom-serializer';
     HeaderComponent,
     LoadingSpinnerComponent,
     ModelComponent,
+    SinglePostComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
