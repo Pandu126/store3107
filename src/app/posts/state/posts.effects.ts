@@ -17,7 +17,7 @@ import { Update } from '@ngrx/entity';
 
 @Injectable()
 export class postsEffects {
-  constructor(private actins$: Actions, private postsService: PostsService) {}
+  constructor(private actins$: Actions, private postsService: PostsService, private router:Router) {}
 
   loadPosts$ = createEffect(() => {
     return this.actins$.pipe(
@@ -52,7 +52,7 @@ export class postsEffects {
     return this.actins$.pipe(
       ofType(editPost),
       switchMap((action) => {
-        console.log(action.post)
+        console.log(action.post);
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
             console.log(data);
@@ -79,4 +79,18 @@ export class postsEffects {
       })
     );
   });
+
+  updatePostRedirect$ = createEffect(
+    () => {
+      return this.actins$.pipe(
+        ofType(updatedPostsSuccess),
+        tap((action) => {
+          if(action.redirect){
+            this.router.navigate(['/posts']);
+          }
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }
