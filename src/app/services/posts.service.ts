@@ -48,4 +48,9 @@ export class PostsService {
       `https://store3107-41ce8-default-rtdb.firebaseio.com/posts/${id}.json`
     );
   }
+  getPostId(id: string):Observable<any> {
+    return this.http.get(
+      `https://store3107-41ce8-default-rtdb.firebaseio.com/posts/${id}.json`
+    );
+  }
 }

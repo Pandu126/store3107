@@ -43,7 +43,7 @@ export class AddPostComponent {
     const post: Post = {
       title: this.postForm.value.title,
       description: this.postForm.value.description,
-      id: ''
+      id:''
     };
     this.store.dispatch(addNewPost({ post }));
     this.postForm.reset();

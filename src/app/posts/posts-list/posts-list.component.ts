@@ -62,7 +62,7 @@ export class PostsListComponent {
     console.log('viewPost');
     this.viewPostId = id;
     this.store.dispatch(viewPost({ id, modelBackdrop: true }));
-    this.store.select(getPostByID, { id: id }).subscribe((res) => {
+    this.store.select(getPostByID).subscribe((res) => {
       this.viewSinglePost = res;
       this.openModel = true;
     });
@@ -86,5 +86,8 @@ export class PostsListComponent {
     const id = this.viewPostId;
     this.store.dispatch(viewPost({ id, modelBackdrop: false }));
     this.openModel = false;
+  }
+  directToView(id:any){
+    this.router.navigate([`/posts/details/${id}`])
   }
 }

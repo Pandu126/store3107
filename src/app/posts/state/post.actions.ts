@@ -45,7 +45,7 @@ export const addpostSuccess = createAction(
 
 export const updatedPostsSuccess = createAction(
   postsEnum.UPDATE_POST_SUCCESS,
-  props<{ post: Update<Post> }>()
+  props<{ post: Update<Post>, redirect:boolean }>()
 );
 
 export const viewPost = createAction(
