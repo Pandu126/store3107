@@ -1,22 +1,18 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { PostsState } from './post.state';
-import { Post } from 'src/app/Models/post.model';
+import { PostsState, postsAdapter } from './post.state';
+
 
 export const getPostsState = createFeatureSelector<PostsState>('posts');
-export const getPosts = createSelector(
-  getPostsState,
-  (state: { posts: Post[] }) => {
-    return state.posts;
-  }
-);
+export const postSelectors = postsAdapter.getSelectors();
+export const getPosts = createSelector(getPostsState, postSelectors.selectAll);
 
 export const getPostByID = createSelector(
-  getPostsState,
+  getPosts,
   (state: any, props: any) => {
-    return state.posts.find((post: { id: any; })=> post.id === props.id)
+    return state.posts ? state.posts[props.id] : null;
   }
 );
-export const modelwindow = createSelector(getPostsState,(state:any)=>{
+export const modelwindow = createSelector(getPostsState, (state: any) => {
   console.log(state);
   return state.modelBackdrop;
-})
+});

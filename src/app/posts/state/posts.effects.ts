@@ -12,6 +12,8 @@ import {
   updatedPostsSuccess,
 } from './post.actions';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { Post } from 'src/app/Models/post.model';
+import { Update } from '@ngrx/entity';
 
 @Injectable()
 export class postsEffects {
@@ -54,7 +56,12 @@ export class postsEffects {
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
             console.log(data);
-            return updatedPostsSuccess({ post: action.post });
+            const id = action.post.id
+            const updatedPost: Update<Post> = {
+              id:id,
+              changes:{...action.post}
+            }
+            return updatedPostsSuccess({ post: updatedPost });
           })
         );
       })

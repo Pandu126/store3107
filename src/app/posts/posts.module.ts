@@ -11,6 +11,7 @@ import { postsReducer } from './state/post.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { postsEffects } from './state/posts.effects';
+import { SinglePostComponent } from './single-post/single-post.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PostsListComponent, AddPostComponent, EditPostComponent],
+  declarations: [PostsListComponent, AddPostComponent, EditPostComponent, SinglePostComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
