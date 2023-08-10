@@ -1,3 +1,4 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 import { Post } from 'src/app/Models/post.model';
 
@@ -44,7 +45,7 @@ export const addpostSuccess = createAction(
 
 export const updatedPostsSuccess = createAction(
   postsEnum.UPDATE_POST_SUCCESS,
-  props<{ post: Post, redirect:boolean }>()
+  props<{ post: Update<Post> }>()
 );
 
 export const viewPost = createAction(
