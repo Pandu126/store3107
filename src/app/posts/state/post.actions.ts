@@ -12,6 +12,7 @@ export enum postsEnum {
   LOAD_POSTS = '[posts page] load posts',
   LOAD_POSTS_SUCCESS = '[posts page] load posts success',
   VIEW_POST = '[posts page] view post',
+  DUMMY = '[dummy action]'
 }
 
 export const addNewPost = createAction(
@@ -52,3 +53,5 @@ export const viewPost = createAction(
   postsEnum.VIEW_POST,
   props<{ id: string; modelBackdrop: boolean }>()
 );
+
+export const dummyAction = createAction(postsEnum.DUMMY)

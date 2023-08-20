@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { Post } from 'src/app/Models/post.model';
 import { AppState } from 'src/app/Store/app.state';
-import { getPostByID, getPosts } from '../state/posts.selector';
+import { getCount, getPostByID, getPosts, getviewById } from '../state/posts.selector';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   deletePost,
@@ -26,12 +26,14 @@ export class PostsListComponent {
   viewSinglePost!: Post;
   editPostForm!: FormGroup;
   openModel!: boolean;
+  postsCount!: Observable<number>;
+  postSubscription!: Subscription;
   displayedColumns: string[] = ['id', 'title', 'description', 'actions'];
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit() {
     this.route.paramMap.subscribe((dat) => {
       this.id = dat.get('id');
@@ -49,6 +51,7 @@ export class PostsListComponent {
         Validators.minLength(8),
       ]),
     });
+    this.postsCount = this.store.pipe(select(getCount))
   }
 
   deletePost(id: any) {
@@ -56,19 +59,20 @@ export class PostsListComponent {
       console.log('delete the post');
     }
     this.store.dispatch(deletePost({ id }));
+    this.closeModel()
     this.router.navigate(['/posts']);
   }
   viewPost(id: string) {
-    console.log('viewPost');
     this.viewPostId = id;
     this.store.dispatch(viewPost({ id, modelBackdrop: true }));
-    this.store.select(getPostByID).subscribe((res) => {
+    this.openModel = true;
+    this.postSubscription = this.store.select(getviewById, { id }).subscribe((res: Post) => {
+      console.log(res);
       this.viewSinglePost = res;
-      this.openModel = true;
-    });
-    this.editPostForm.setValue({
-      title: this.viewSinglePost.title,
-      description: this.viewSinglePost.description,
+      this.editPostForm.setValue({
+        title: this.viewSinglePost.title,
+        description: this.viewSinglePost.description,
+      });
     });
   }
   onEditPost() {
@@ -80,14 +84,20 @@ export class PostsListComponent {
       description,
     };
     this.store.dispatch(editPost({ post }));
+    this.closeModel()
     this.router.navigate(['/posts']);
   }
   closeModel() {
     const id = this.viewPostId;
-    this.store.dispatch(viewPost({ id, modelBackdrop: false }));
     this.openModel = false;
+    this.store.dispatch(viewPost({ id, modelBackdrop: false }));
   }
-  directToView(id:any){
+  directToView(id: any) {
     this.router.navigate([`/posts/details/${id}`])
+  }
+  onDestroy() {
+    if (this.postSubscription) {
+      this.postSubscription.unsubscribe();
+    }
   }
 }

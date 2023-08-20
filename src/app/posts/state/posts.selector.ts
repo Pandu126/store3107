@@ -1,4 +1,4 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector, props } from '@ngrx/store';
 import { PostsState, postsAdapter } from './post.state';
 import { getCurrentRoute } from 'src/app/router/router.selector';
 import { RouterStateUrl } from 'src/app/router/custom-serializer';
@@ -19,7 +19,11 @@ export const getPostByID = createSelector(
     return state ? state[route.params['id']] : null;
   }
 );
+export const getviewById = createSelector(getPostEntities,(state:any,props:any)=>{
+  return state[props.id];
+})
 export const modelwindow = createSelector(getPostsState, (state: any) => {
-  console.log(state);
   return state.modelBackdrop;
 });
+
+export const getCount = createSelector(getPostsState, (state) => state.count)

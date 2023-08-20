@@ -13,37 +13,26 @@ import {
 const _postsReducer = createReducer(
   postsInitialState,
   on(addpostSuccess, (state, action) => {
-    return postsAdapter.addOne(action.post, state)
+    return postsAdapter.addOne(action.post, { ...state, count: state.count + 1 })
   }),
-  // on(editPost, (state, action) => {
-  //   const updatedposts = state.posts.map((post:Post) => {
-  //     return action.post.id === post.id ? action.post : post;
-  //   });
-  //   return {
-  //     ...state,
-  //     posts: updatedposts,
-  //   };
-  // }),
   on(updatedPostsSuccess, (state, action) => {
     return postsAdapter.updateOne(action.post, state);
-   }),
-   
+  }),
+
   on(deletePostSuccess, (state: any, { id }) => {
     return postsAdapter.removeOne(id, state)
   }),
   on(loadPostsSuccess, (state, action) => {
     return postsAdapter.addMany(action.posts, state);
   }),
-  on(loadPosts, (state, action) => {
+  on(loadPosts, (state) => {
+    return { ...state, count: state.count + 1 }
+  }),
+  on(viewPost, (state, action) => {
+    console.log('viewPost called in reducer', action);
     return {
       ...state,
-    };
-  }),
-  on(viewPost, (state,action)=>{
-    console.log('viewPost called in reducer', action);
-    return{
-      ...state,
-      modelBackdrop:action.modelBackdrop
+      modelBackdrop: action.modelBackdrop
     }
   })
 );

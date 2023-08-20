@@ -6,35 +6,43 @@ import {
   addpostSuccess,
   deletePost,
   deletePostSuccess,
+  dummyAction,
   editPost,
   loadPosts,
   loadPostsSuccess,
   updatedPostsSuccess,
 } from './post.actions';
-import { filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Post } from 'src/app/Models/post.model';
 import { Update } from '@ngrx/entity';
 import { Router } from '@angular/router';
 import { ROUTER_NAVIGATION, RouterNavigatedAction } from '@ngrx/router-store';
+import { Store } from '@ngrx/store';
+import { getPosts } from './posts.selector';
+import { of } from 'rxjs';
 
 @Injectable()
 export class postsEffects {
   constructor(
     private actins$: Actions,
     private postsService: PostsService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private store: Store
+  ) { }
 
   loadPosts$ = createEffect(() => {
     return this.actins$.pipe(
       ofType(loadPosts),
-      mergeMap((action) => {
-        return this.postsService.getPosts().pipe(
-          map((posts) => {
-            console.log(posts);
-            return loadPostsSuccess({ posts: posts });
-          })
-        );
+      withLatestFrom(this.store.select(getPosts)),
+      mergeMap(([action, post]) => {
+        if (!post.length || post.length === 1) {
+          return this.postsService.getPosts().pipe(
+            map((posts) => {
+              return loadPostsSuccess({ posts: posts });
+            })
+          );
+        }
+        return of(dummyAction());
       })
     );
   });
@@ -45,9 +53,7 @@ export class postsEffects {
       mergeMap((action) => {
         return this.postsService.addPosts(action.post).pipe(
           map((data) => {
-            console.log(data);
             const post = { ...action.post, id: data.name };
-            console.log(post);
             return addpostSuccess({ post: post });
           })
         );
@@ -58,10 +64,8 @@ export class postsEffects {
     return this.actins$.pipe(
       ofType(editPost),
       switchMap((action) => {
-        console.log(action.post);
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
-            console.log(data);
             const id = action.post.id;
             const updatedPost: Update<Post> = {
               id: id,
@@ -109,13 +113,17 @@ export class postsEffects {
       map((r: any) => {
         return r.payload.routerState['params']['id'];
       }),
-      switchMap((id) => {
-        return this.postsService.getPostId(id).pipe(
-          map((post) => {
-            const postData = [{ ...post, id }];
-            return loadPostsSuccess({ posts: postData });
-          })
-        );
+      withLatestFrom(this.store.select(getPosts)),
+      switchMap(([id, posts]) => {
+        if (!posts.length) {
+          return this.postsService.getPostId(id).pipe(
+            map((post) => {
+              const postData = [{ ...post, id }];
+              return loadPostsSuccess({ posts: postData });
+            })
+          );
+        }
+        return of(dummyAction())
       })
     );
   });
